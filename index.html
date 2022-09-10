@@ -1,14 +1,125 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<link rel="stylesheet" type="text/css" href="style.css"/>
+	<style>
+		html {
+			font-family: sans-serif;
+			height: 99%
+		}
+		
+		body {
+			background-color: #020;
+			color: #0D0;
+			height: 98%
+		}
+
+		.border {
+			position: absolute;
+			width: 200px;
+			height: auto;
+			border: 2px solid #0D0;
+			z-index: 1
+		}
+
+		.window {
+			width: 196px;
+			height: 96px;
+			margin: 4px
+		}
+
+		.center {
+			background-color: #020;
+			border: 2px solid #0D0;
+			color: #0D0;
+			cursor: pointer;
+			position: absolute;
+			transform: translateX(80%);
+			transition-duration: 0.4s
+		}
+		
+		.center:hover {
+			background-color: #0D0;
+			color: #020
+		}
+		
+		.head {
+			position: absolute;
+			z-index: 1
+		}
+		
+		.ripple {
+			position: absolute;
+			height: 0px;
+			width: 0px;
+			background-image: radial-gradient(#002900, transparent);
+			border-radius: 50%;
+			z-index: 0
+		}
+	</style>
 	<title>Kyle_Game_25's Profile</title>
 </head>
-<body>
-	<span>
-		Placeholder<br><br>
-		Check out My Only Game!<br>
-		<a href="https://kyle-game-25.github.io/infinite-nerf/">Infinite Nerf(s)</a>
-	</span>
+<body onmousemove="cursor(event)" onclick="cursor(event)">
+	<big><big><b class="head">Check out My Only Game!</b></big></big><br><br>
+	<div class="border"><div class="window">
+		<b>The Infinite Nerf</b><br>
+		Go through a game that is slow, with a ton of nerfs slowing your progress<br>
+		<button class="center" onclick="window.open('https://kyle-game-25.github.io/infinite-nerf/')">Play Game</button>
+	</div></div>
+	<div id="ripple">
+	</div>
+	<script>
+		var amt = 256
+		var change = 0
+		var cursorX = []
+		var cursorY = []
+		var html = ""
+		var ripple = []
+		var ripple_size = []
+		var toggle = 1
+		
+		for (let i = 0; i < amt; i++) {
+			 html += "<div id='ripple" + i + "' class='ripple' style='display:none'></div>"
+			 cursorX[i] = -32767
+			 cursorY[i] = -32767
+			 ripple_size[i] = amt
+		}
+		
+		document.getElementById("ripple").innerHTML = html
+		
+		for (let i = 0; i < amt; i++) {
+			ripple[i] = document.getElementById("ripple" + i)
+		}
+		
+		function cursor(event) {
+			cursorX[change] = event.clientX
+			cursorY[change] = event.clientY
+			
+			if (cursorX[change] < window.innerWidth-32 && cursorY[change] < window.innerHeight-32) {
+				ripple_size[change] = 32
+				
+				change++
+				change = change%amt
+			}
+		}
+		
+		setInterval(function(){
+			for (let i = 0; i < amt; i++) {
+				if (ripple_size[i] < 64) {
+					ripple[i].style.display = ""
+					ripple_size[i] *= 1.005
+				} else {
+					ripple[i].style.display = "none"
+				}
+				
+				ripple[i].style.left = cursorX[i]-ripple_size[i]/2 + "px"
+				ripple[i].style.top = cursorY[i]-ripple_size[i]/2 + "px"
+				
+				ripple[i].style.opacity = (0.2-(ripple_size[i]-64)/64)
+				
+				ripple[i].style.height = ripple_size[i] + "px"
+				ripple[i].style.width =  ripple_size[i] + "px"
+			}
+		},10)
+	</script>
 </body>
 </html>
